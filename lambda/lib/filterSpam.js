@@ -1,6 +1,8 @@
 var AWS = require("aws-sdk");
-var config = require("./config.js");
+var config = require("../config.js");
 var { emitMetric, emitSpamMetric }  = require("./metrics.js");
+
+const spamKey = "SPAM";
 
 /**
  * Filters out spam, if custom filter is enabled in config.
@@ -25,9 +27,6 @@ function filterSpam(data) {
     if(filterBySESReceiptVerdicts(sesNotification.receipt)) spam = true;
     if(filterBySubjectKeyword(sesNotification.mail.commonHeaders.subject)) spam = true;
     if(filterByTargetRecipient(sesNotification.mail.destination[0])) spam = true;
-    // TODO -----
-    //spam = filterByFrom(sesNotification.mail.source);
-    // filterByStrictSender(asdf);
   }
 
   // If the spam flag is still not set after all the spam filters, then forward the email.
@@ -40,9 +39,10 @@ function filterSpam(data) {
       level: "error",
       event: JSON.stringify(data.event)
     });
-    return Promise.reject(new Error('SPAM'));
+    return Promise.reject(new Error(spamKey));
   }
 }
+
 
 /**
  * Filter By SES Receipt Verdicts
@@ -89,6 +89,7 @@ function filterBySubjectKeyword(subject) {
   return spam;
 }
 
+
 /**
  * Filter By Target Recipient will check the To: email value and drop any configured addresses.
  * Use this if you want to give an email to someone you know will spam you (games, conferences).
@@ -104,39 +105,13 @@ function filterByTargetRecipient(recipientEmail) {
     'spam@berkshiretownhomes.com'
   ];
 
-  for (recipient in targetRecipients) {
+  for (const recipient of targetRecipients) {
     if (recipientEmail === recipient) spam = logSpam(typeName, recipient);
   }
 
   return spam;
 }
 
-
-/*
-function filterByStrictSender(asdf) {
-
-  // adobe
-
-  // Real linked-in emails come from: @linkedin.com so drop everything else.
-  if (sesNotification.mail.destination[0] === "linkedin@tylerwalts.com" && !sesNotification.mail.source.toLowerCase().includes("@linkedin.com")){
-    spam = handleSpam("LinkedIn");
-  }
-
-  // Real dropbox emails come from: @dropbox.com so drop everything else.
-  if (sesNotification.mail.destination[0] === "dropbox@tylerwalts.com" && !sesNotification.mail.source.toLowerCase().includes("@dropbox.com")){
-    spam = handleSpam("Dropbox");
-  }
-  if (sesNotification.mail.destination[0] === "dji@tylerwalts.com" && !sesNotification.mail.source.toLowerCase().includes("dji.com")){
-    spam = handleSpam("DJI");
-  }
-  if (sesNotification.mail.destination[0] === "kickstarter@tylerwalts.com" && !sesNotification.mail.source.toLowerCase().includes("@kickstarter.com")){
-    spam = handleSpam("Kickstarter");
-  }
-  if (sesNotification.mail.destination[0] === "tinyprints@tylerwalts.com" && !sesNotification.mail.source.toLowerCase().includes("@tinyprints.com")){
-    spam = handleSpam("Tinyprints");
-  }
-};
-*/
 
 /**
  * Log Spam emits a metric and returns true, to easily set the spam flag.
@@ -148,7 +123,9 @@ function logSpam(type, term) {
   return true;
 }
 
+
 module.exports = {
-    filterSpam
+    filterSpam,
+    spamKey
 };
 

@@ -3,7 +3,7 @@
 
 var AWS = require("aws-sdk");
 var config = require("./config.js");
-const { filterSpam } = require("./lib/filterSpam.js");
+const { filterSpam, spamKey } = require("./lib/filterSpam.js");
 var { emitResultMetric }  = require("./lib/metrics.js");
 
 console.log("AWS Lambda SES Forwarder // @arithmetric // Version 5.0.0");
@@ -369,6 +369,7 @@ exports.filterSpam = filterSpam;
  * configuration, SES object, and S3 object.
  */
 exports.handler = function(event, context, callback, overrides) {
+  context.callbackWaitsForEmptyEventLoop = true;
   var steps =
     overrides && overrides.steps
       ? overrides.steps
@@ -402,7 +403,8 @@ exports.handler = function(event, context, callback, overrides) {
       return data.callback();
     })
     .catch(function(err) {
-      if (err.message === "SPAM") {
+      // Special check to see if the error type was Spam
+      if (err.message === `${spamKey}`) {
         data.log({
           level: "warn",
           message: "Forward was dropped: " + err.message,
@@ -410,7 +412,7 @@ exports.handler = function(event, context, callback, overrides) {
           stack: err.stack
         });
         emitResultMetric("Spam");
-        return data.callback(new Error("Error: Step returned error."));
+        return data.callback(new Error("Email dropped as spam."));
       } else {
         data.log({
           level: "error",

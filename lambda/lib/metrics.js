@@ -1,44 +1,70 @@
-var AWS = require("aws-sdk");
-var config = require("./config.js");
-AWS.config.update({region: process.env.AWS_REGION});
+var config = require("../config.js");
 
 const NAMESPACE_ROOT = `${config.config.project}/SESForwarder`;
 
 /**
- * emitMetric to CloudWatch
+ * emitMetric to CloudWatch using Embedded Metric Format (EMF) of logging from Lambda
+
+ * See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Specification.html
+ * Also: https://aws.amazon.com/blogs/mt/lowering-costs-and-focusing-on-our-customers-with-amazon-cloudwatch-embedded-custom-metrics/
+ *
+ * Params:
+ *   metricName is a string name of metric.
+ *
+ *   dimensions is an array of dimension objets, following cloudwatch.putMetric schema.
+ *     For example:
+ *
+ *     const dimensions = [
+ *       {
+ *         Name: 'MyDimensionName',
+ *         Value: 'MyDimensionValue'
+ *       }
+ *     ];
+ *
+ *    namespace is a string of the CloudWatch namespace that metrics will be emitted under.
  */
 function emitMetric(metricName, dimensions= [], namespace = NAMESPACE_ROOT) {
+  // The EMF log spec puts dimension keys inside the schema and values outside at root level.
+  // Build up a list of just the keys.
+  let dimensionKeys = [];
+  for (const dimension of dimensions){
+    dimensionKeys.push(dimension.Name);
+  }
 
-  const cloudwatch = new AWS.CloudWatch({
-     apiVersion: '2010-08-01',
-     region: process.env.AWS_REGION
-  });
-
-  const params = {
-    MetricData: [
-      {
-        MetricName: metricName,
-        Dimensions: dimensions,
-        //Unit: 'None',
-        Unit: 'Count',
-        Value: 1.0
-      },
-    ],
-    Namespace: namespace
-  };
-  console.log('Params', params);
-
-  cloudwatch.putMetricData(params, function(err, data) {
-    console.log('IN CALLBACK');
-    if (err) {
-      console.log("CW Error", err);
-    } else {
-      console.log("CW Success", JSON.stringify(data));
+  // Create the EMF log structure following the spec.
+  let embeddedMetricLog = {
+    "_aws": {
+        "Timestamp": Date.now(),
+        "CloudWatchMetrics": [
+            {
+                "Namespace": namespace,
+                "Dimensions": dimensionKeys,
+                "Metrics": [
+                    {
+                        "Name": metricName,
+                        "Unit": "Count"
+                    }
+                ]
+            }
+        ]
     }
-  });
+  };
 
+  // Add the metric name and count as a root element, following EMF spec
+  embeddedMetricLog[metricName] = 1.0;
+
+  // Add the dimension mapping as root elements, following EMF spec.
+  for (const dimension of dimensions){
+    embeddedMetricLog[dimension.Name] = dimension.Value;
+  }
+
+  // When executing in Lambda, EMF spec just needs to be emitted as std output.
+  console.log(JSON.stringify(embeddedMetricLog));
+
+  // Return true to signal success logging metric
   return true;
 }
+
 
 /**
  * emitSpamMetric to CloudWatch using consistent namespace.
@@ -55,6 +81,7 @@ function emitSpamMetric(type, term) {
 
   return emitMetric(term, dimensions, `${NAMESPACE_ROOT}/Spam`);
 }
+
 
 /**
  * emitResultMetric to CloudWatch using consistent namespace.
