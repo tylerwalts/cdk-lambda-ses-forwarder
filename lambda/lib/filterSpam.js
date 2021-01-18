@@ -1,6 +1,6 @@
-var AWS = require("aws-sdk");
-var config = require("../config.js");
-var { emitMetric, emitSpamMetric }  = require("./metrics.js");
+const AWS = require("aws-sdk");
+const config = require("../config.js");
+const { emitMetric, emitSpamMetric }  = require("./metrics.js");
 
 const spamKey = "SPAM";
 
@@ -71,18 +71,8 @@ function filterBySubjectKeyword(subject) {
   const typeName = 'SubjectKeyword';
   let spam = false;
 
-  // TODO - add to config
-  // List of keywords to scan subjects for.  The match is case-insensitive, but dashboard metrics will appear as configured.
-  const subjectFilterKeywords = [
-    'Viagra',
-    'Kamagra',
-    'Levitra',
-    'Keranique',
-    'Cialis'
-  ];
-
-  for (let i = 0; i < subjectFilterKeywords.length; i++) {
-    const keyword = subjectFilterKeywords[i];
+  for (let i = 0; i < config.config.subjectFilterKeywords.length; i++) {
+    const keyword = config.config.subjectFilterKeywords[i];
     if (subject.toLowerCase().includes(keyword.toLowerCase())) spam = logSpam(typeName, keyword);
   }
 
@@ -99,13 +89,7 @@ function filterByTargetRecipient(recipientEmail) {
   const typeName = 'TargetRecipient';
   let spam = false;
 
-  // TODO - add to config
-  // List of keywords to scan subjects for.  The match is case-insensitive, but dashboard metrics will appear as configured.
-  const targetRecipients = [
-    'spam@berkshiretownhomes.com'
-  ];
-
-  for (const recipient of targetRecipients) {
+  for (const recipient of config.config.blockedRecipients) {
     if (recipientEmail === recipient) spam = logSpam(typeName, recipient);
   }
 
