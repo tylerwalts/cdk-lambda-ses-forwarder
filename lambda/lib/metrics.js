@@ -3,8 +3,11 @@ var config = require("../config.js");
 const NAMESPACE_ROOT = `${config.config.project}/SESForwarder`;
 
 /**
- * emitMetric to CloudWatch using Embedded Metric Format (EMF) of logging from Lambda
-
+ * emitMetric to CloudWatch using Embedded Metric Format (EMF) of logging from Lambda.  For example:
+ *
+ * {"_aws":{"Timestamp":1611034887493,"CloudWatchMetrics":[{"Namespace":"BerkshireTownhomes/SESForwarder/Spam",
+ * "Dimensions":[["Type"]],"Metrics":[{"Name":"Viagra","Unit":"Count"}]}]},"Viagra":1,"Type":"SubjectKeyword"}
+ *
  * See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Specification.html
  * Also: https://aws.amazon.com/blogs/mt/lowering-costs-and-focusing-on-our-customers-with-amazon-cloudwatch-embedded-custom-metrics/
  *
@@ -26,7 +29,7 @@ const NAMESPACE_ROOT = `${config.config.project}/SESForwarder`;
 function emitMetric(metricName, dimensions= [], namespace = NAMESPACE_ROOT) {
   // The EMF log spec puts dimension keys inside the schema and values outside at root level.
   // Build up a list of just the keys.
-  let dimensionKeys = [];
+  let dimensionKeys = [], dimensionsArray = [];
   for (const dimension of dimensions){
     dimensionKeys.push(dimension.Name);
   }
@@ -38,7 +41,7 @@ function emitMetric(metricName, dimensions= [], namespace = NAMESPACE_ROOT) {
         "CloudWatchMetrics": [
             {
                 "Namespace": namespace,
-                "Dimensions": dimensionKeys,
+                "Dimensions": [ dimensionKeys ],
                 "Metrics": [
                     {
                         "Name": metricName,

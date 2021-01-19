@@ -90,7 +90,7 @@ function filterByTargetRecipient(recipientEmail) {
   let spam = false;
 
   for (const recipient of config.config.blockedRecipients) {
-    if (recipientEmail === recipient) spam = logSpam(typeName, recipient);
+    if (recipientEmail === recipient) spam = logSpam(typeName, recipient.replace('@', '.'));
   }
 
   return spam;
