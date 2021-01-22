@@ -81,8 +81,7 @@ export class SesStack extends cdk.Stack {
     new ses.ReceiptRuleSet(this, `${config.project}RuleSet`, ruleSetProperties);
 
 
-
-    // Dashboard
+    /* Define a CloudWatch Metrics Dashboard */
 
     // Total Incoming
     let totalIncomingWidget = new cloudwatch.SingleValueWidget({

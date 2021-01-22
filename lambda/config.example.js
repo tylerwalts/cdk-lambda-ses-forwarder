@@ -34,7 +34,7 @@ exports.config = {
   spamFilter: 2,  // 0 = None, 1 = Default, 2 = Custom
 
   // List of keywords to scan subjects for.  The match is case-insensitive, but
-  // spam metric names will appear as cased here.
+  // spam metric names will appear as cased here. Examples of common spam terms:
   subjectFilterKeywords: [
     'Viagra',
     'Kamagra',

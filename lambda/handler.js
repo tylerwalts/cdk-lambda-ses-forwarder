@@ -369,7 +369,6 @@ exports.filterSpam = filterSpam;
  * configuration, SES object, and S3 object.
  */
 exports.handler = function(event, context, callback, overrides) {
-  context.callbackWaitsForEmptyEventLoop = true;
   var steps =
     overrides && overrides.steps
       ? overrides.steps
