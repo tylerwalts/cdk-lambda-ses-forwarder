@@ -5,7 +5,7 @@ const NAMESPACE_ROOT = `${config.config.project}/SESForwarder`;
 /**
  * emitMetric to CloudWatch using Embedded Metric Format (EMF) of logging from Lambda.  For example:
  *
- * {"_aws":{"Timestamp":1611034887493,"CloudWatchMetrics":[{"Namespace":"BerkshireTownhomes/SESForwarder/Spam",
+ * {"_aws":{"Timestamp":1611034887493,"CloudWatchMetrics":[{"Namespace":"MyDomain/SESForwarder/Spam",
  * "Dimensions":[["Type"]],"Metrics":[{"Name":"Viagra","Unit":"Count"}]}]},"Viagra":1,"Type":"SubjectKeyword"}
  *
  * See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Specification.html
