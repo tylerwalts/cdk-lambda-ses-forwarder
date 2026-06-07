@@ -19,6 +19,11 @@ interface Config {
   spamFilter: SpamFilterOption;
   subjectFilterKeywords: string[];
   blockedRecipients: string[];
+  blockedSenderDomains: string[];
+  blockedSenders: string[];
+  bulkMailHeaders: string[];
+  brandKeywords: string[];
+  trustedBrandDomains: string[];
   forwardMapping: ForwardMapping;
 }
 

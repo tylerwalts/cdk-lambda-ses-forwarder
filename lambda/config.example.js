@@ -43,12 +43,69 @@ exports.config = {
     'Kamagra',
     'Levitra',
     'Keranique',
-    'Cialis'
+    'Cialis',
+    'YOU PERVERT',
+    'Omaha Steak',
+    'Omaha-Steak',
+    'Ace Hardware',
+    'Walmart Points',
+    'Pittsburg Tool',
+    'BCBS Plan',
+    'Costco Visit',
+    'CVS Points',
   ],
 
   // List of target recipients to block
   blockedRecipients: [
     'spam@example.com'
+  ],
+
+  // List of sender email addresses to block (exact match against mail.source)
+  blockedSenders: [
+    'bluesoleil@tylerwalts.com',
+    'tyler@tylerwalts.com',
+    'asdflkj@tylerwalts.com',
+    'adobe@tylerwalts.com',
+    'banggood@tylerwalts.com',
+    'admin@tylerwalts.com',
+    'tinyprints@tylerwalts.com',
+    'robinhood@tylerwalts.com',
+  ],
+
+  // List of sender domains to block (matched against mail.source domain)
+  blockedSenderDomains: [
+    'cheekychillies.com',
+    'bougiebarks.com'
+  ],
+
+  // Headers that indicate bulk/mass mailers. Presence of any = spam.
+  bulkMailHeaders: [
+    'X-Node-Mail',
+    'X-Delivery-Attempt-ID',
+    'X-Attachment-Ref'
+  ],
+
+  // Brand names that spammers impersonate in the From display name.
+  // If a brand keyword appears in the display name but the sender domain
+  // is NOT in trustedBrandDomains, it's flagged as brand impersonation.
+  brandKeywords: [
+    'Harbor Freight',
+    'HarborFreight',
+    'Amazon',
+    'Walmart',
+    'Costco',
+    'PayPal',
+    'Netflix'
+  ],
+
+  // Domains that are allowed to use brand keywords in their From name.
+  trustedBrandDomains: [
+    'harborfreight.com',
+    'amazon.com',
+    'walmart.com',
+    'costco.com',
+    'paypal.com',
+    'netflix.com'
   ],
 
   //  'forwardMapping' - Object where the key is the lowercase email address from
