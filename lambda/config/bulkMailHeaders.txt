@@ -1,0 +1,3 @@
+X-Node-Mail
+X-Delivery-Attempt-ID
+X-Attachment-Ref
