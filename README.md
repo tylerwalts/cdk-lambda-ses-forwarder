@@ -16,6 +16,9 @@ This is a CDK-ification of [this project](https://github.com/arithmetric/aws-lam
 1. [Verify the email address(es) that you're forwarding to](https://console.aws.amazon.com/ses/home?region=us-east-1#verified-senders-email:)
 1. Send a test email to your recipient, and it should forward correctly
 
+Note that only one ruleset can be active at a time.  If you have multiple rulesets in the same AWS account, then you have to have a root/default ruleset and then have copies of each domain rule inside of it.
+
+
 ## Updates
 After pulling down a code update, re-run the deployment command:
 1. `npx cdk deploy --require-approval never`

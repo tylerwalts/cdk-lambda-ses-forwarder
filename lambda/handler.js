@@ -420,7 +420,12 @@ exports.handler = function(event, context, callback, overrides) {
           stack: err.stack
         });
         emitResultMetric("Error");
-        return data.callback(new Error("Error: Step returned error."));
+        // Return success to SES to prevent bounces while send access is suspended.
+        // Emails are already persisted in S3 by the receipt rule's S3 action.
+        return data.callback();
+
+        // After this is resolved:
+        // return data.callback(new Error("Error: Step returned error."));
       }
     });
 };
