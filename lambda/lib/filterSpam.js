@@ -27,6 +27,10 @@ function filterSpam(data) {
     if(filterBySESReceiptVerdicts(sesNotification.receipt)) spam = true;
     if(filterBySubjectKeyword(sesNotification.mail.commonHeaders.subject)) spam = true;
     if(filterByTargetRecipient(sesNotification.mail.destination[0])) spam = true;
+    if(filterBySender(sesNotification.mail.source)) spam = true;
+    if(filterBySenderDomain(sesNotification.mail.source)) spam = true;
+    warnBulkMailHeaders(sesNotification.mail);
+    if(filterByBrandImpersonation(sesNotification.mail.commonHeaders.from[0], sesNotification.mail.source)) spam = true;
   }
 
   // If the spam flag is still not set after all the spam filters, then forward the email.
@@ -91,6 +95,92 @@ function filterByTargetRecipient(recipientEmail) {
 
   for (const recipient of config.config.blockedRecipients) {
     if (recipientEmail === recipient) spam = logSpam(typeName, recipient.replace('@', '.'));
+  }
+
+  return spam;
+}
+
+
+/**
+ * Filter By Sender checks the full source email address against a blocklist.
+ **/
+function filterBySender(source) {
+  console.log("filterBySender");
+  const typeName = 'BlockedSender';
+  let spam = false;
+
+  const senderEmail = source.toLowerCase();
+  for (const blocked of config.config.blockedSenders) {
+    if (senderEmail === blocked.toLowerCase()) {
+      spam = logSpam(typeName, blocked);
+    }
+  }
+
+  return spam;
+}
+
+
+/**
+ * Filter By Sender Domain checks the source email domain against a blocklist.
+ **/
+function filterBySenderDomain(source) {
+  console.log("filterBySenderDomain");
+  const typeName = 'SenderDomain';
+  let spam = false;
+
+  const senderDomain = source.split('@').pop().toLowerCase();
+  for (const domain of config.config.blockedSenderDomains) {
+    if (senderDomain === domain.toLowerCase()) {
+      spam = logSpam(typeName, domain);
+    }
+  }
+
+  return spam;
+}
+
+
+/**
+ * Warn on Bulk Mail Headers — logs a warning when mass-mailer headers are
+ * detected but does NOT block the email.
+ **/
+function warnBulkMailHeaders(mail) {
+  const headerNames = mail.headers.map(h => h.name.toLowerCase());
+  for (const bulkHeader of config.config.bulkMailHeaders) {
+    if (headerNames.includes(bulkHeader.toLowerCase())) {
+      console.warn(JSON.stringify({
+        level: "warn",
+        message: "Bulk mail header detected",
+        header: bulkHeader,
+        sender: mail.source,
+        recipient: mail.destination[0],
+        subject: mail.commonHeaders.subject
+      }));
+    }
+  }
+}
+
+
+/**
+ * Filter By Brand Impersonation detects when the From display name contains
+ * a known brand keyword but the sender domain is not the brand's real domain.
+ **/
+function filterByBrandImpersonation(fromHeader, source) {
+  console.log("filterByBrandImpersonation");
+  const typeName = 'BrandImpersonation';
+  let spam = false;
+
+  const senderDomain = source.split('@').pop().toLowerCase();
+  const displayName = fromHeader.toLowerCase();
+
+  for (const brand of config.config.brandKeywords) {
+    if (displayName.includes(brand.toLowerCase())) {
+      const isTrusted = config.config.trustedBrandDomains.some(
+        d => senderDomain === d.toLowerCase() || senderDomain.endsWith('.' + d.toLowerCase())
+      );
+      if (!isTrusted) {
+        spam = logSpam(typeName, brand);
+      }
+    }
   }
 
   return spam;

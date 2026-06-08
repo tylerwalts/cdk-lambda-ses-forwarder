@@ -1,25 +1,25 @@
-interface ForwardMapping {
-  [key: string]: string[];
-}
-
 export declare const enum SpamFilterOption {
-  NONE,
-  DEFAULT,
-  CUSTOM
+    NONE = 0,
+    DEFAULT = 1,
+    CUSTOM = 2
 }
-
-interface Config {
-  project: string;
-  domain: string;
-  recipient: string;
-  headerValue: string;
-  emailKeyPrefix: string;
-  subjectPrefix: string;
-  allowPlusSign: boolean;
-  spamFilter: SpamFilterOption;
-  subjectFilterKeywords: string[];
-  blockedRecipients: string[];
-  forwardMapping: ForwardMapping;
-}
-
-export declare const config: Config;
+export declare const config: {
+    project: string;
+    domain: string;
+    recipient: string;
+    headerValue: string;
+    emailKeyPrefix: string;
+    subjectPrefix: string;
+    allowPlusSign: boolean;
+    spamFilter: SpamFilterOption;
+    subjectFilterKeywords: string[];
+    blockedRecipients: string[];
+    blockedSenders: string[];
+    blockedSenderDomains: string[];
+    bulkMailHeaders: string[];
+    brandKeywords: string[];
+    trustedBrandDomains: string[];
+    forwardMapping: {
+        [key: string]: string[];
+    };
+};
