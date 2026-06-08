@@ -232,15 +232,44 @@ export class SesStack extends cdk.Stack {
         })]
     });
 
-    // Recent logs
-    let queryLinesList = ['fields @timestamp, mail.commonHeaders.from.0, mail.destination.0, mail.commonHeaders.subject, ispresent(mail.commonHeaders.from.0) as fw'];
-    queryLinesList.push('filter fw != 0');
-    queryLinesList.push('sort @timestamp desc');
-    queryLinesList.push('limit 10');
-    let logWidget = new cloudwatch.LogQueryWidget({
-        title: 'Recent Forwarder Logs',
+    // All incoming emails
+    const allEmailsWidget = new cloudwatch.LogQueryWidget({
+        title: 'All Incoming Emails',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
-        queryLines: queryLinesList,
+        queryLines: [
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result',
+          'filter event = "email_processed"',
+          'sort @timestamp desc',
+          'limit 20'
+        ],
+        width: 24,
+        height: 6
+    });
+
+    // Spam that was filtered
+    const spamLogWidget = new cloudwatch.LogQueryWidget({
+        title: 'Filtered Spam',
+        logGroupNames: [forwarderLambda.logGroup.logGroupName],
+        queryLines: [
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, spamReasons as Reasons',
+          'filter event = "email_processed" and result = "spam"',
+          'sort @timestamp desc',
+          'limit 20'
+        ],
+        width: 24,
+        height: 6
+    });
+
+    // Successfully forwarded emails
+    const forwardedLogWidget = new cloudwatch.LogQueryWidget({
+        title: 'Forwarded Emails',
+        logGroupNames: [forwarderLambda.logGroup.logGroupName],
+        queryLines: [
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, forwardedTo as ForwardedTo',
+          'filter event = "email_processed" and result = "success"',
+          'sort @timestamp desc',
+          'limit 20'
+        ],
         width: 24,
         height: 6
     });
@@ -259,7 +288,13 @@ export class SesStack extends cdk.Stack {
           new cloudwatch.Column(spamWidget),
         ],
         [
-          logWidget
+          allEmailsWidget
+        ],
+        [
+          forwardedLogWidget
+        ],
+        [
+          spamLogWidget
         ]
       ]
     });

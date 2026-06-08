@@ -1,174 +1,104 @@
-const AWS = require("aws-sdk");
+"use strict";
+
 const config = require("../config.js");
-const { emitMetric, emitSpamMetric }  = require("./metrics.js");
+const { emitSpamMetric } = require("./metrics.js");
 
 const spamKey = "SPAM";
 
 /**
  * Filters out spam, if custom filter is enabled in config.
- * Some basic filters are included below.
- * To add more custom filters:
- * 1. Create a function that emits metrics and returns true if spam is found.
- * 2. Add a  call to your new function in the list below.
- * 3. Consider contributing this back to the project in a PR!
+ * Returns collected spam reasons on the data object for structured logging.
  */
 function filterSpam(data) {
-  let spam = false; // Flag to set by one or more of the filter checks.
+  data.spamReasons = [];
 
-  // Only check for spam to drop if custom filter is configured
   if (config.config.spamFilter == 2) {
-    console.log('Custom Spam Filter is enabled.  Running filters...');
-
-    // Get the SES notification object from the data event
     const sesNotification = data.event.Records[0].ses;
-    console.log("SES Notification:\n", JSON.stringify(sesNotification, null, 2));
 
-    // Run through a series of filters.
-    if(filterBySESReceiptVerdicts(sesNotification.receipt)) spam = true;
-    if(filterBySubjectKeyword(sesNotification.mail.commonHeaders.subject)) spam = true;
-    if(filterByTargetRecipient(sesNotification.mail.destination[0])) spam = true;
-    if(filterBySender(sesNotification.mail.source)) spam = true;
-    if(filterBySenderDomain(sesNotification.mail.source)) spam = true;
-    warnBulkMailHeaders(sesNotification.mail);
-    if(filterByBrandImpersonation(sesNotification.mail.commonHeaders.from[0], sesNotification.mail.source)) spam = true;
+    filterBySESReceiptVerdicts(sesNotification.receipt, data.spamReasons);
+    filterBySubjectKeyword(sesNotification.mail.commonHeaders.subject, data.spamReasons);
+    filterByTargetRecipient(sesNotification.mail.destination[0], data.spamReasons);
+    filterBySender(sesNotification.mail.source, data.spamReasons);
+    filterBySenderDomain(sesNotification.mail.source, data.spamReasons);
+    warnBulkMailHeaders(sesNotification.mail, data);
+    filterByBrandImpersonation(sesNotification.mail.commonHeaders.from[0], sesNotification.mail.source, data.spamReasons);
   }
 
-  // If the spam flag is still not set after all the spam filters, then forward the email.
-  if (!spam) {
+  if (data.spamReasons.length === 0) {
     return Promise.resolve(data);
   } else {
-    // If the spam flag is set by any of the spam filters, then reject the promise to stop the forward.
-    data.log({
-      message: "Dropped Spam.",
-      level: "error",
-      event: JSON.stringify(data.event)
-    });
+    for (const reason of data.spamReasons) {
+      emitSpamMetric(reason.type, reason.term);
+    }
     return Promise.reject(new Error(spamKey));
   }
 }
 
 
-/**
- * Filter By SES Receipt Verdicts
- * The following logic is from AWS Docs and is also found in the default CDK dropSpam implementation.
- * This function has the same impact as choosing spamFilter config = 1 = Default
- * Docs:  https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-lambda-example-functions.html
- **/
-function filterBySESReceiptVerdicts(sesReceipt) {
-  console.log("filterBySESverdicts");
-  const typeName = 'SESReceiptVerdict';
-  let spam = false;
-  if (sesReceipt.spfVerdict.status === 'FAIL') spam = logSpam(typeName, 'Sender Policy Framework (SPF)');
-  if (sesReceipt.dkimVerdict.status === 'FAIL') spam = logSpam(typeName, 'DomainKeys Identified Mail (DKIM)');
-  if (sesReceipt.spamVerdict.status === 'FAIL') spam = logSpam(typeName, 'AWS Spam Verdict');
-  if (sesReceipt.virusVerdict.status === 'FAIL') spam = logSpam(typeName, 'AWS Virus Verdict');
-  return spam;
+function filterBySESReceiptVerdicts(sesReceipt, reasons) {
+  const type = 'SESReceiptVerdict';
+  if (sesReceipt.spfVerdict.status === 'FAIL') reasons.push({ type, term: 'SPF' });
+  if (sesReceipt.dkimVerdict.status === 'FAIL') reasons.push({ type, term: 'DKIM' });
+  if (sesReceipt.spamVerdict.status === 'FAIL') reasons.push({ type, term: 'SpamVerdict' });
+  if (sesReceipt.virusVerdict.status === 'FAIL') reasons.push({ type, term: 'VirusVerdict' });
 }
 
 
-/**
- * Filter by Subject Keyword
- * Given an email subject, tag it as spam if it contains any configured keywords.
- **/
-function filterBySubjectKeyword(subject) {
-  console.log("filterBySubject");
-  const typeName = 'SubjectKeyword';
-  let spam = false;
-
-  for (let i = 0; i < config.config.subjectFilterKeywords.length; i++) {
-    const keyword = config.config.subjectFilterKeywords[i];
-    if (subject.toLowerCase().includes(keyword.toLowerCase())) spam = logSpam(typeName, keyword);
+function filterBySubjectKeyword(subject, reasons) {
+  const type = 'SubjectKeyword';
+  for (const keyword of config.config.subjectFilterKeywords) {
+    if (subject.toLowerCase().includes(keyword.toLowerCase())) {
+      reasons.push({ type, term: keyword });
+    }
   }
-
-  return spam;
 }
 
 
-/**
- * Filter By Target Recipient will check the To: email value and drop any configured addresses.
- * Use this if you want to give an email to someone you know will spam you (games, conferences).
- **/
-function filterByTargetRecipient(recipientEmail) {
-  console.log("filterByTarget");
-  const typeName = 'TargetRecipient';
-  let spam = false;
-
+function filterByTargetRecipient(recipientEmail, reasons) {
+  const type = 'TargetRecipient';
   for (const recipient of config.config.blockedRecipients) {
-    if (recipientEmail === recipient) spam = logSpam(typeName, recipient.replace('@', '.'));
+    if (recipientEmail === recipient) {
+      reasons.push({ type, term: recipient });
+    }
   }
-
-  return spam;
 }
 
 
-/**
- * Filter By Sender checks the full source email address against a blocklist.
- **/
-function filterBySender(source) {
-  console.log("filterBySender");
-  const typeName = 'BlockedSender';
-  let spam = false;
-
+function filterBySender(source, reasons) {
+  const type = 'BlockedSender';
   const senderEmail = source.toLowerCase();
   for (const blocked of config.config.blockedSenders) {
     if (senderEmail === blocked.toLowerCase()) {
-      spam = logSpam(typeName, blocked);
+      reasons.push({ type, term: blocked });
     }
   }
-
-  return spam;
 }
 
 
-/**
- * Filter By Sender Domain checks the source email domain against a blocklist.
- **/
-function filterBySenderDomain(source) {
-  console.log("filterBySenderDomain");
-  const typeName = 'SenderDomain';
-  let spam = false;
-
+function filterBySenderDomain(source, reasons) {
+  const type = 'SenderDomain';
   const senderDomain = source.split('@').pop().toLowerCase();
   for (const domain of config.config.blockedSenderDomains) {
     if (senderDomain === domain.toLowerCase()) {
-      spam = logSpam(typeName, domain);
+      reasons.push({ type, term: domain });
     }
   }
-
-  return spam;
 }
 
 
-/**
- * Warn on Bulk Mail Headers — logs a warning when mass-mailer headers are
- * detected but does NOT block the email.
- **/
-function warnBulkMailHeaders(mail) {
+function warnBulkMailHeaders(mail, data) {
   const headerNames = mail.headers.map(h => h.name.toLowerCase());
   for (const bulkHeader of config.config.bulkMailHeaders) {
     if (headerNames.includes(bulkHeader.toLowerCase())) {
-      console.warn(JSON.stringify({
-        level: "warn",
-        message: "Bulk mail header detected",
-        header: bulkHeader,
-        sender: mail.source,
-        recipient: mail.destination[0],
-        subject: mail.commonHeaders.subject
-      }));
+      if (!data.bulkHeaders) data.bulkHeaders = [];
+      data.bulkHeaders.push(bulkHeader);
     }
   }
 }
 
 
-/**
- * Filter By Brand Impersonation detects when the From display name contains
- * a known brand keyword but the sender domain is not the brand's real domain.
- **/
-function filterByBrandImpersonation(fromHeader, source) {
-  console.log("filterByBrandImpersonation");
-  const typeName = 'BrandImpersonation';
-  let spam = false;
-
+function filterByBrandImpersonation(fromHeader, source, reasons) {
+  const type = 'BrandImpersonation';
   const senderDomain = source.split('@').pop().toLowerCase();
   const displayName = fromHeader.toLowerCase();
 
@@ -178,23 +108,10 @@ function filterByBrandImpersonation(fromHeader, source) {
         d => senderDomain === d.toLowerCase() || senderDomain.endsWith('.' + d.toLowerCase())
       );
       if (!isTrusted) {
-        spam = logSpam(typeName, brand);
+        reasons.push({ type, term: brand });
       }
     }
   }
-
-  return spam;
-}
-
-
-/**
- * Log Spam emits a metric and returns true, to easily set the spam flag.
- * The intent is to record metrics for every reason an email is determined to be spam.
- **/
-function logSpam(type, term) {
-  console.log(`Logging spam, type=${type}, term=${term}`);
-  emitSpamMetric(type, term);
-  return true;
 }
 
 
@@ -202,4 +119,3 @@ module.exports = {
     filterSpam,
     spamKey
 };
-

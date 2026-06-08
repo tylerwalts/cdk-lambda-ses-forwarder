@@ -1,44 +1,10 @@
-//https://github.com/arithmetric/aws-lambda-ses-forwarder
 "use strict";
 
 var AWS = require("aws-sdk");
 var config = require("./config.js");
 const { filterSpam, spamKey } = require("./lib/filterSpam.js");
-var { emitResultMetric }  = require("./lib/metrics.js");
+var { emitResultMetric } = require("./lib/metrics.js");
 
-console.log("AWS Lambda SES Forwarder // @arithmetric // Version 5.0.0");
-
-// Configure the S3 bucket and key prefix for stored raw emails, and the
-// mapping of email addresses to forward from and to.
-//
-// Expected keys/values:
-//
-// - fromEmail: Forwarded emails will come from this verified address
-//
-// - subjectPrefix: Forwarded emails subject will contain this prefix
-//
-// - emailBucket: S3 bucket name where SES stores emails.
-//
-// - emailKeyPrefix: S3 key name prefix where SES stores email. Include the
-//   trailing slash.
-//
-// - allowPlusSign: Enables support for plus sign suffixes on email addresses.
-//   If set to `true`, the username/mailbox part of an email address is parsed
-//   to remove anything after a plus sign. For example, an email sent to
-//   `example+test@example.com` would be treated as if it was sent to
-//   `example@example.com`.
-//
-// - forwardMapping: Object where the key is the lowercase email address from
-//   which to forward and the value is an array of email addresses to which to
-//   send the message.
-//
-//   To match all email addresses on a domain, use a key without the name part
-//   of an email address before the "at" symbol (i.e. `@example.com`).
-//
-//   To match a mailbox name on all domains, use a key without the "at" symbol
-//   and domain part of an email address (i.e. `info`).
-//
-//   To match all email addresses matching no other mapping, use "@" as a key.
 var defaultConfig = {
   fromEmail: config.config.recipient,
   subjectPrefix: config.config.subjectPrefix,
@@ -48,15 +14,7 @@ var defaultConfig = {
   forwardMapping: config.config.forwardMapping
 };
 
-/**
- * Parses the SES event record provided for the `mail` and `receipients` data.
- *
- * @param {object} data - Data bundle with context, email, etc.
- *
- * @return {object} - Promise resolved with data.
- */
 exports.parseEvent = function(data) {
-  // Validate characteristics of a SES event record.
   if (
     !data.event ||
     !data.event.hasOwnProperty("Records") ||
@@ -78,13 +36,6 @@ exports.parseEvent = function(data) {
   return Promise.resolve(data);
 };
 
-/**
- * Transforms the original recipients to the desired forwarded destinations.
- *
- * @param {object} data - Data bundle with context, email, etc.
- *
- * @return {object} - Promise resolved with data.
- */
 exports.transformRecipients = function(data) {
   var newRecipients = [];
   data.originalRecipients = data.recipients;
@@ -133,10 +84,7 @@ exports.transformRecipients = function(data) {
 
   if (!newRecipients.length) {
     data.log({
-      message:
-        "Finishing process. No new recipients found for " +
-        "original destinations: " +
-        data.originalRecipients.join(", "),
+      message: "No new recipients found for: " + data.originalRecipients.join(", "),
       level: "info"
     });
     return data.callback();
@@ -146,24 +94,7 @@ exports.transformRecipients = function(data) {
   return Promise.resolve(data);
 };
 
-/**
- * Fetches the message data from S3.
- *
- * @param {object} data - Data bundle with context, email, etc.
- *
- * @return {object} - Promise resolved with data.
- */
 exports.fetchMessage = function(data) {
-  // Copying email object to ensure read permission
-  data.log({
-    level: "info",
-    message:
-      "Fetching email at s3://" +
-      data.config.emailBucket +
-      "/" +
-      data.config.emailKeyPrefix +
-      data.email.messageId
-  });
   return new Promise(function(resolve, reject) {
     data.s3.copyObject(
       {
@@ -191,7 +122,6 @@ exports.fetchMessage = function(data) {
           );
         }
 
-        // Load the raw email from S3
         data.s3.getObject(
           {
             Bucket: data.config.emailBucket,
@@ -218,42 +148,19 @@ exports.fetchMessage = function(data) {
   });
 };
 
-/**
- * Processes the message data, making updates to recipients and other headers
- * before forwarding message.
- *
- * @param {object} data - Data bundle with context, email, etc.
- *
- * @return {object} - Promise resolved with data.
- */
 exports.processMessage = function(data) {
   var match = data.emailData.match(/^((?:.+\r?\n)*)(\r?\n(?:.*\s+)*)/m);
   var header = match && match[1] ? match[1] : data.emailData;
   var body = match && match[2] ? match[2] : "";
 
-  // Add "Reply-To:" with the "From" address if it doesn't already exists
   if (!/^reply-to:[\t ]?/im.test(header)) {
     match = header.match(/^from:[\t ]?(.*(?:\r?\n\s+.*)*\r?\n)/im);
     var from = match && match[1] ? match[1] : "";
     if (from) {
       header = header + "Reply-To: " + from;
-      data.log({
-        level: "info",
-        message: "Added Reply-To address of: " + from
-      });
-    } else {
-      data.log({
-        level: "info",
-        message:
-          "Reply-To address not added because From address was not " +
-          "properly extracted."
-      });
     }
   }
 
-  // SES does not allow sending messages from an unverified address,
-  // so replace the message's "From:" header with the original
-  // recipient (which is a verified domain)
   header = header.replace(/^from:[\t ]?(.*(?:\r?\n\s+.*)*)/gim, function(
     match,
     from
@@ -277,14 +184,12 @@ exports.processMessage = function(data) {
     return fromText;
   });
 
-  // Add a prefix to the Subject
   if (data.config.subjectPrefix) {
     header = header.replace(/^subject:[\t ]?(.*)/gim, function(match, subject) {
       return "Subject: " + data.config.subjectPrefix + subject;
     });
   }
 
-  // Replace original 'To' header with a manually defined one
   if (data.config.toEmail) {
     header = header.replace(
       /^to:[\t ]?(.*)/gim,
@@ -292,32 +197,15 @@ exports.processMessage = function(data) {
     );
   }
 
-  // Remove the Return-Path header.
   header = header.replace(/^return-path:[\t ]?(.*)\r?\n/gim, "");
-
-  // Remove Sender header.
   header = header.replace(/^sender:[\t ]?(.*)\r?\n/gim, "");
-
-  // Remove Message-ID header.
   header = header.replace(/^message-id:[\t ]?(.*)\r?\n/gim, "");
-
-  // Remove all DKIM-Signature headers to prevent triggering an
-  // "InvalidParameterValue: Duplicate header 'DKIM-Signature'" error.
-  // These signatures will likely be invalid anyways, since the From
-  // header was modified.
   header = header.replace(/^dkim-signature:[\t ]?.*\r?\n(\s+.*\r?\n)*/gim, "");
 
   data.emailData = header + body;
   return Promise.resolve(data);
 };
 
-/**
- * Send email using the SES sendRawEmail command.
- *
- * @param {object} data - Data bundle with context, email, etc.
- *
- * @return {object} - Promise resolved with data.
- */
 exports.sendMessage = function(data) {
   var params = {
     Destinations: data.recipients,
@@ -326,15 +214,6 @@ exports.sendMessage = function(data) {
       Data: data.emailData
     }
   };
-  data.log({
-    level: "info",
-    message:
-      "sendMessage: Sending email via SES. Original recipients: " +
-      data.originalRecipients.join(", ") +
-      ". Transformed recipients: " +
-      data.recipients.join(", ") +
-      "."
-  });
   return new Promise(function(resolve, reject) {
     data.ses.sendRawEmail(params, function(err, result) {
       if (err) {
@@ -346,11 +225,6 @@ exports.sendMessage = function(data) {
         });
         return reject(new Error("Error: Email sending failed."));
       }
-      data.log({
-        level: "info",
-        message: "sendRawEmail() successful.",
-        result: result
-      });
       resolve(data);
     });
   });
@@ -359,15 +233,41 @@ exports.sendMessage = function(data) {
 exports.filterSpam = filterSpam;
 
 /**
- * Handler function to be invoked by AWS Lambda with an inbound SES email as
- * the event.
- *
- * @param {object} event - Lambda event from inbound email received by AWS SES.
- * @param {object} context - Lambda context object.
- * @param {object} callback - Lambda callback object.
- * @param {object} overrides - Overrides for the default data, including the
- * configuration, SES object, and S3 object.
+ * Emits a single structured JSON log summarizing the email processing result.
  */
+function emitSummaryLog(data, result, error) {
+  const ses = data.event.Records[0].ses;
+  const mail = ses.mail;
+  const source = mail.source || '';
+
+  const summary = {
+    event: "email_processed",
+    from: (mail.commonHeaders && mail.commonHeaders.from && mail.commonHeaders.from[0]) || source,
+    to: (mail.destination && mail.destination[0]) || '',
+    subject: (mail.commonHeaders && mail.commonHeaders.subject) || '',
+    source: source,
+    sourceDomain: source.split('@').pop() || '',
+    messageId: mail.messageId || '',
+    result: result,
+    spamReasons: (data.spamReasons || []).map(r => `${r.type}:${r.term}`),
+    forwarded: result === 'success',
+  };
+
+  if (result === 'success') {
+    summary.forwardedTo = data.recipients || [];
+  }
+
+  if (data.bulkHeaders && data.bulkHeaders.length > 0) {
+    summary.bulkHeadersDetected = data.bulkHeaders;
+  }
+
+  if (result === 'error' && error) {
+    summary.error = error.message;
+  }
+
+  console.log(JSON.stringify(summary));
+}
+
 exports.handler = function(event, context, callback, overrides) {
   var steps =
     overrides && overrides.steps
@@ -394,38 +294,19 @@ exports.handler = function(event, context, callback, overrides) {
   };
   Promise.series(steps, data)
     .then(function(data) {
-      data.log({
-        level: "info",
-        message: "Process finished successfully."
-      });
       emitResultMetric("Success");
+      emitSummaryLog(data, "success");
       return data.callback();
     })
     .catch(function(err) {
-      // Special check to see if the error type was Spam
       if (err.message === `${spamKey}`) {
-        data.log({
-          level: "warn",
-          message: "Forward was dropped: " + err.message,
-          error: err,
-          stack: err.stack
-        });
         emitResultMetric("Spam");
-        return data.callback(new Error("Email dropped as spam."));
-      } else {
-        data.log({
-          level: "error",
-          message: "Step returned error: " + err.message,
-          error: err,
-          stack: err.stack
-        });
-        emitResultMetric("Error");
-        // Return success to SES to prevent bounces while send access is suspended.
-        // Emails are already persisted in S3 by the receipt rule's S3 action.
+        emitSummaryLog(data, "spam");
         return data.callback();
-
-        // After this is resolved:
-        // return data.callback(new Error("Error: Step returned error."));
+      } else {
+        emitResultMetric("Error");
+        emitSummaryLog(data, "error", err);
+        return data.callback();
       }
     });
 };
