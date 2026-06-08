@@ -237,7 +237,7 @@ export class SesStack extends cdk.Stack {
         title: 'All Incoming Emails',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result',
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result, s3BodyKey as `S3 Body Key`',
           'filter event = "email_processed"',
           'sort @timestamp desc',
           'limit 20'
@@ -251,7 +251,7 @@ export class SesStack extends cdk.Stack {
         title: 'Filtered Spam',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, spamReasons as Reasons',
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, spamReasons as Reasons, s3BodyKey as `S3 Body Key`',
           'filter event = "email_processed" and result = "spam"',
           'sort @timestamp desc',
           'limit 20'
@@ -260,13 +260,27 @@ export class SesStack extends cdk.Stack {
         height: 6
     });
 
-    // Successfully forwarded emails
-    const forwardedLogWidget = new cloudwatch.LogQueryWidget({
-        title: 'Forwarded Emails',
+    // Allowed emails (not spam)
+    const allowedLogWidget = new cloudwatch.LogQueryWidget({
+        title: 'Allowed Emails',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, forwardedTo as ForwardedTo',
-          'filter event = "email_processed" and result = "success"',
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result, s3BodyKey as `S3 Body Key`',
+          'filter event = "email_processed" and result != "spam"',
+          'sort @timestamp desc',
+          'limit 20'
+        ],
+        width: 24,
+        height: 6
+    });
+
+    // System errors
+    const errorLogWidget = new cloudwatch.LogQueryWidget({
+        title: 'System Errors',
+        logGroupNames: [forwarderLambda.logGroup.logGroupName],
+        queryLines: [
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, error as Error, s3BodyKey as `S3 Body Key`',
+          'filter event = "email_processed" and result = "error"',
           'sort @timestamp desc',
           'limit 20'
         ],

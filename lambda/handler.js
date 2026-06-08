@@ -240,6 +240,7 @@ function emitSummaryLog(data, result, error) {
   const mail = ses.mail;
   const source = mail.source || '';
 
+  const emailKeyPrefix = (data.config && data.config.emailKeyPrefix) || '';
   const summary = {
     event: "email_processed",
     from: (mail.commonHeaders && mail.commonHeaders.from && mail.commonHeaders.from[0]) || source,
@@ -248,8 +249,9 @@ function emitSummaryLog(data, result, error) {
     source: source,
     sourceDomain: source.split('@').pop() || '',
     messageId: mail.messageId || '',
+    s3BodyKey: emailKeyPrefix + (mail.messageId || ''),
     result: result,
-    spamReasons: (data.spamReasons || []).map(r => `${r.type}:${r.term}`),
+    spamReasons: (data.spamReasons || []).map(r => `${r.type}:${r.term}`).join(', '),
     forwarded: result === 'success',
   };
 
