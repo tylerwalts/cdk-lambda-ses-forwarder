@@ -305,10 +305,13 @@ export class SesStack extends cdk.Stack {
           allEmailsWidget
         ],
         [
-          forwardedLogWidget
+          allowedLogWidget
         ],
         [
           spamLogWidget
+        ],
+        [
+          errorLogWidget
         ]
       ]
     });
