@@ -252,7 +252,7 @@ export class SesStack extends cdk.Stack {
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
           'fields @timestamp as Time, `from` as From, to as To, subject as Subject, s3BodyKey as `S3 Body Key`',
-          'filter event = "email_processed" and result = "success"',
+          'filter event = "email_processed" and result != "spam"',
           'sort @timestamp desc',
           'limit 10'
         ],

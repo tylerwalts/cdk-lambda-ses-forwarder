@@ -45,10 +45,25 @@ function filterBySESReceiptVerdicts(sesReceipt, reasons) {
 }
 
 
+function normalizeHomoglyphs(str) {
+  return str
+    .replace(/0/g, 'o')
+    .replace(/1/g, 'l')
+    .replace(/3/g, 'e')
+    .replace(/4/g, 'a')
+    .replace(/5/g, 's')
+    .replace(/\$/g, 's')
+    .replace(/!/g, 'i')
+    .replace(/\|/g, 'l')
+    .replace(/ /g, ' ');
+}
+
+
 function filterBySubjectKeyword(subject, reasons) {
   const type = 'SubjectKeyword';
+  const normalizedSubject = normalizeHomoglyphs(subject.toLowerCase());
   for (const keyword of config.config.subjectFilterKeywords) {
-    if (subject.toLowerCase().includes(keyword.toLowerCase())) {
+    if (normalizedSubject.includes(keyword.toLowerCase())) {
       reasons.push({ type, term: keyword });
     }
   }
