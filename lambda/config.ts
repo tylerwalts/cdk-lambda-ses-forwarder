@@ -34,6 +34,7 @@ export const config = {
   bulkMailHeaders: loadList('bulkMailHeaders.txt'),
   brandKeywords: loadList('brandKeywords.txt'),
   trustedBrandDomains: loadList('trustedBrandDomains.txt'),
+  verifiedAliases: loadList('verifiedAliases.txt'),
 
   forwardMapping: {
     "@tylerwalts.com": ["tylerwalts@gmail.com"],

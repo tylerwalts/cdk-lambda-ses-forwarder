@@ -232,7 +232,7 @@ export class SesStack extends cdk.Stack {
         })]
     });
 
-    // All incoming emails
+    // All incoming emails (right column, tall)
     const allEmailsWidget = new cloudwatch.LogQueryWidget({
         title: 'All Incoming Emails',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
@@ -240,51 +240,51 @@ export class SesStack extends cdk.Stack {
           'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result, s3BodyKey as `S3 Body Key`',
           'filter event = "email_processed"',
           'sort @timestamp desc',
-          'limit 20'
+          'limit 50'
         ],
-        width: 24,
-        height: 6
+        width: 12,
+        height: 18
     });
 
-    // Spam that was filtered
-    const spamLogWidget = new cloudwatch.LogQueryWidget({
-        title: 'Filtered Spam',
-        logGroupNames: [forwarderLambda.logGroup.logGroupName],
-        queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, spamReasons as Reasons, s3BodyKey as `S3 Body Key`',
-          'filter event = "email_processed" and result = "spam"',
-          'sort @timestamp desc',
-          'limit 20'
-        ],
-        width: 24,
-        height: 6
-    });
-
-    // Allowed emails (not spam)
+    // Allowed emails (left column, top)
     const allowedLogWidget = new cloudwatch.LogQueryWidget({
         title: 'Allowed Emails',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, result as Result, s3BodyKey as `S3 Body Key`',
-          'filter event = "email_processed" and result != "spam"',
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, s3BodyKey as `S3 Body Key`',
+          'filter event = "email_processed" and result = "success"',
           'sort @timestamp desc',
-          'limit 20'
+          'limit 10'
         ],
-        width: 24,
+        width: 12,
         height: 6
     });
 
-    // System errors
+    // Spam that was filtered (left column, middle)
+    const spamLogWidget = new cloudwatch.LogQueryWidget({
+        title: 'Filtered Spam',
+        logGroupNames: [forwarderLambda.logGroup.logGroupName],
+        queryLines: [
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, spamReasons as Reasons',
+          'filter event = "email_processed" and result = "spam"',
+          'sort @timestamp desc',
+          'limit 10'
+        ],
+        width: 12,
+        height: 6
+    });
+
+    // System errors (left column, bottom)
     const errorLogWidget = new cloudwatch.LogQueryWidget({
         title: 'System Errors',
         logGroupNames: [forwarderLambda.logGroup.logGroupName],
         queryLines: [
-          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, error as Error, s3BodyKey as `S3 Body Key`',
+          'fields @timestamp as Time, `from` as From, to as To, subject as Subject, error as Error',
           'filter event = "email_processed" and result = "error"',
           'sort @timestamp desc',
-          'limit 20'
+          'limit 10'
         ],
-        width: 24,
+        width: 12,
         height: 6
     });
 
@@ -302,16 +302,8 @@ export class SesStack extends cdk.Stack {
           new cloudwatch.Column(spamWidget),
         ],
         [
-          allEmailsWidget
-        ],
-        [
-          allowedLogWidget
-        ],
-        [
-          spamLogWidget
-        ],
-        [
-          errorLogWidget
+          new cloudwatch.Column(allowedLogWidget, spamLogWidget, errorLogWidget),
+          new cloudwatch.Column(allEmailsWidget),
         ]
       ]
     });

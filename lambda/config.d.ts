@@ -19,6 +19,7 @@ export declare const config: {
     bulkMailHeaders: string[];
     brandKeywords: string[];
     trustedBrandDomains: string[];
+    verifiedAliases: string[];
     forwardMapping: {
         [key: string]: string[];
     };

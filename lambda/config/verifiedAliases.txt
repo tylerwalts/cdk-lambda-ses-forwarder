@@ -1,0 +1,6 @@
+# Aliases that require the sender domain to contain the alias name.
+# If an email is sent TO one of these addresses, the sender's domain
+# must contain the alias (the part before @) somewhere in it.
+# e.g. "linkedin" requires sender domain to contain "linkedin"
+# One alias per line (just the local part, without @domain).
+linkedin

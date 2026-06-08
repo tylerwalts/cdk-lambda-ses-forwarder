@@ -31,6 +31,7 @@ exports.config = {
   bulkMailHeaders: loadList('bulkMailHeaders.txt'),
   brandKeywords: loadList('brandKeywords.txt'),
   trustedBrandDomains: loadList('trustedBrandDomains.txt'),
+  verifiedAliases: loadList('verifiedAliases.txt'),
 
   forwardMapping: {
     "info@example.com": ["example.john@example.com", "example.jen@example.com"],

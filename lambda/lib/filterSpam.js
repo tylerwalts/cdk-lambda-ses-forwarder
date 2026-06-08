@@ -20,6 +20,7 @@ function filterSpam(data) {
     filterByTargetRecipient(sesNotification.mail.destination[0], data.spamReasons);
     filterBySender(sesNotification.mail.source, data.spamReasons);
     filterBySenderDomain(sesNotification.mail.source, data.spamReasons);
+    filterByVerifiedAlias(sesNotification.mail.destination[0], sesNotification.mail.source, data.spamReasons);
     warnBulkMailHeaders(sesNotification.mail, data);
     filterByBrandImpersonation(sesNotification.mail.commonHeaders.from[0], sesNotification.mail.source, data.spamReasons);
   }
@@ -81,6 +82,27 @@ function filterBySenderDomain(source, reasons) {
   for (const domain of config.config.blockedSenderDomains) {
     if (senderDomain === domain.toLowerCase()) {
       reasons.push({ type, term: domain });
+    }
+  }
+}
+
+
+/**
+ * If the recipient alias is in the verifiedAliases list, the sender domain
+ * must contain that alias string. e.g. linkedin@tylerwalts.com requires
+ * sender domain to contain "linkedin".
+ */
+function filterByVerifiedAlias(recipient, source, reasons) {
+  const type = 'VerifiedAlias';
+  const alias = recipient.split('@')[0].toLowerCase();
+  const senderDomain = source.split('@').pop().toLowerCase();
+
+  for (const verifiedAlias of config.config.verifiedAliases) {
+    if (alias === verifiedAlias.toLowerCase()) {
+      if (!senderDomain.includes(verifiedAlias.toLowerCase())) {
+        reasons.push({ type, term: `${alias}!=${senderDomain}` });
+      }
+      break;
     }
   }
 }
