@@ -1,0 +1,7 @@
+{
+  "name": "ses-forwarder-lambda",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "~2.631.0"
+  }
+}

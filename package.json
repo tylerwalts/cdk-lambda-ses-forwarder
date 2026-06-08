@@ -11,24 +11,18 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.44.0",
-    "@types/jest": "^25.2.1",
-    "@types/node": "10.17.5",
-    "aws-cdk": "1.44.0",
-    "jest": "^25.5.0",
-    "ts-jest": "^25.3.1",
-    "ts-node": "^8.1.0",
-    "typescript": "~3.7.2"
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "aws-cdk": "^2.170.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "~5.4.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-lambda": "1.44.0",
-    "@aws-cdk/aws-ses": "1.44.0",
-    "@aws-cdk/aws-ses-actions": "1.44.0",
-    "@aws-cdk/aws-s3": "1.44.0",
-    "@aws-cdk/core": "1.44.0",
-    "@aws-cdk/aws-iam": "1.44.0",
-    "aws-sdk": "~2.631.0",
-    "path": "^0.12.7",
+    "aws-cdk-lib": "^2.170.0",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.16"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

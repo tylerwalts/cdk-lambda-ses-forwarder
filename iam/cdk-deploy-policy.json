@@ -1,0 +1,116 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CloudFormation",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateStack",
+        "cloudformation:UpdateStack",
+        "cloudformation:DeleteStack",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:GetTemplate",
+        "cloudformation:GetTemplateSummary",
+        "cloudformation:ListStacks",
+        "cloudformation:CreateChangeSet",
+        "cloudformation:DescribeChangeSet",
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CDKBootstrapS3",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutBucketPolicy",
+        "s3:PutLifecycleConfiguration",
+        "s3:PutBucketVersioning"
+      ],
+      "Resource": [
+        "arn:aws:s3:::cdk-*",
+        "arn:aws:s3:::cdk-*/*"
+      ]
+    },
+    {
+      "Sid": "S3EmailBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucketPolicy",
+        "s3:GetBucketPolicy",
+        "s3:PutLifecycleConfiguration",
+        "s3:GetLifecycleConfiguration"
+      ],
+      "Resource": "arn:aws:s3:::*ses*"
+    },
+    {
+      "Sid": "IAM",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:GetRole",
+        "iam:PassRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:GetRolePolicy",
+        "iam:CreatePolicy",
+        "iam:DeletePolicy",
+        "iam:GetPolicy",
+        "iam:ListPolicyVersions"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/SesForwarderTylerWalts*",
+        "arn:aws:iam::*:policy/SesForwarderTylerWalts*"
+      ]
+    },
+    {
+      "Sid": "SES",
+      "Effect": "Allow",
+      "Action": [
+        "ses:CreateReceiptRuleSet",
+        "ses:DeleteReceiptRuleSet",
+        "ses:DescribeReceiptRuleSet",
+        "ses:CreateReceiptRule",
+        "ses:DeleteReceiptRule",
+        "ses:UpdateReceiptRule",
+        "ses:DescribeReceiptRule"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CDKBootstrapRoles",
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::680397041807:role/cdk-hnb659fds-deploy-role-680397041807-*",
+        "arn:aws:iam::680397041807:role/cdk-hnb659fds-file-publishing-role-680397041807-*",
+        "arn:aws:iam::680397041807:role/cdk-hnb659fds-image-publishing-role-680397041807-*",
+        "arn:aws:iam::680397041807:role/cdk-hnb659fds-lookup-role-680397041807-*",
+        "arn:aws:iam::680397041807:role/cdk-hnb659fds-cfn-exec-role-680397041807-*"
+      ]
+    },
+    {
+      "Sid": "SSMBootstrap",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Resource": "arn:aws:ssm:*:*:parameter/cdk-bootstrap/*"
+    }
+  ]
+}

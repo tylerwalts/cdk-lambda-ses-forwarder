@@ -1,19 +1,20 @@
-import * as cdk from "@aws-cdk/core";
-import iam = require("@aws-cdk/aws-iam");
-import lambda = require("@aws-cdk/aws-lambda");
-import s3 = require("@aws-cdk/aws-s3");
-import ses = require("@aws-cdk/aws-ses");
-import actions = require("@aws-cdk/aws-ses-actions");
-import cloudwatch = require('@aws-cdk/aws-cloudwatch');
-import path = require("path");
+import * as cdk from "aws-cdk-lib";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import * as ses from "aws-cdk-lib/aws-ses";
+import * as actions from "aws-cdk-lib/aws-ses-actions";
+import * as cloudwatch from "aws-cdk-lib/aws-cloudwatch";
+import * as path from "path";
+import { Construct } from "constructs";
 
 import { SpamFilterOption, config } from "../lambda/config";
 
 export class SesStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const bucket = new s3.Bucket(this, `${config.project}SESBucket`, {
+    const bucket = new s3.Bucket(this, `${config.project}SESBucketNew`, {
         lifecycleRules: [
           {
             transitions: [
@@ -30,10 +31,10 @@ export class SesStack extends cdk.Stack {
         ],
     });
 
-    const forwarderLambda = new lambda.Function(this, `${config.project}SESForwarder`, {
-      runtime: lambda.Runtime.NODEJS_12_X,
+    const forwarderLambda = new lambda.Function(this, `${config.project}SESForwarder_New`, {
+      runtime: lambda.Runtime.NODEJS_22_X,
       handler: "handler.handler",
-      functionName: `${config.project}SESForwarder`,
+      functionName: `${config.project}SESForwarder_New`,
       code: lambda.Code.fromAsset(path.join(__dirname, "../lambda")),
       environment: {
         BUCKETNAME: bucket.bucketName
@@ -111,7 +112,7 @@ export class SesStack extends cdk.Stack {
         metrics: [new cloudwatch.Metric({
             namespace: "AWS/Lambda",
             metricName: 'Invocations',
-            dimensions: {
+            dimensionsMap: {
                 FunctionName: forwarderLambda.functionName
             },
             statistic: 'Sum'
@@ -165,7 +166,7 @@ export class SesStack extends cdk.Stack {
         left: [new cloudwatch.Metric({
             namespace: 'AWS/Lambda',
             metricName: 'Invocations',
-            dimensions: {
+            dimensionsMap: {
                 FunctionName: forwarderLambda.functionName
             },
             statistic: 'Sum'
@@ -173,7 +174,7 @@ export class SesStack extends cdk.Stack {
         right: [new cloudwatch.Metric({
             namespace: 'AWS/Lambda',
             metricName: 'Duration',
-            dimensions: {
+            dimensionsMap: {
                 FunctionName: forwarderLambda.functionName
             },
             statistic: 'Sum'
@@ -244,8 +245,8 @@ export class SesStack extends cdk.Stack {
         height: 6
     });
 
-    const emailDashboard = new cloudwatch.Dashboard(this, `${config.project}EmailDashboard`, {
-      dashboardName: `${config.project}-Email-Dashboard`,
+    const emailDashboard = new cloudwatch.Dashboard(this, `${config.project}EmailDashboard_New`, {
+      dashboardName: `${config.project}-Email-Dashboard_New`,
       widgets: [
         [
           new cloudwatch.Column(totalIncomingWidget),

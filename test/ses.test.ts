@@ -1,13 +1,12 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
 import * as Ses from '../lib/ses-stack';
 
-test('Empty Stack', () => {
+test('Stack creates Lambda function', () => {
     const app = new cdk.App();
-    // WHEN
     const stack = new Ses.SesStack(app, 'MyTestStack');
-    // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Runtime: 'nodejs22.x'
+    });
 });
