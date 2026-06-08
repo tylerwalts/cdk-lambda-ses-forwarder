@@ -10,8 +10,9 @@ This is a CDK-ification of [this project](https://github.com/arithmetric/aws-lam
 1. `cp ./lambda/config.example.js ./lambda/config.js`
 1. Fill in your info in the config file
 1. `yarn`
+1. `npx tsc`
 1. `npx cdk synth`
-1. `npx cdk deploy --require-approval never`
+1. `npx cdk deploy --require-approval never --profile mailman`
 1. Go into [your SES Console](https://console.aws.amazon.com/ses/home?region=us-east-1#receipt-rules:) and set your new RuleSet as Active. If you have an existing RuleSet, clone it as backup then copy your new rules into your existing rule set manually.
 1. [Verify the email address(es) that you're forwarding to](https://console.aws.amazon.com/ses/home?region=us-east-1#verified-senders-email:)
 1. Send a test email to your recipient, and it should forward correctly
