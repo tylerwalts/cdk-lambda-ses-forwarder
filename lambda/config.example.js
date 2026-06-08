@@ -11,7 +11,7 @@ function loadList(filename) {
   return fs.readFileSync(filepath, 'utf8')
     .split('\n')
     .map(line => line.trim())
-    .filter(line => line.length > 0);
+    .filter(line => line.length > 0 && !line.startsWith('#'));
 }
 
 exports.config = {

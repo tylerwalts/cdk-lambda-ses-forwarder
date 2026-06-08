@@ -1,16 +1,22 @@
-Viagra
-Kamagra
-Levitra
-Keranique
-Cialis
-You Pervert
-Omaha Steak
-Omaha-Steak
-Ace Hardware
-Walmart Points
-Pittsburg Tool
-BCBS Plan
-Costco Visit
-CVS Points
-VIP Sams
-My Lowes Points
+# Subject keywords to block. Matching is case-insensitive.
+# One keyword per line.
+viagra
+kamagra
+levitra
+keranique
+cialis
+you pervert
+omaha steak
+omaha-steak
+ace hardware tools
+walmart points
+pittsburg tool
+bcbs plan
+costco visit
+cvs points
+vip sams
+sams vip
+my lowes points
+aaa member rewards
+membership ciub
+sams 1OO voucher

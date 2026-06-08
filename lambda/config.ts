@@ -14,7 +14,7 @@ function loadList(filename: string): string[] {
   return fs.readFileSync(filepath, 'utf8')
     .split('\n')
     .map((line: string) => line.trim())
-    .filter((line: string) => line.length > 0);
+    .filter((line: string) => line.length > 0 && !line.startsWith('#'));
 }
 
 export const config = {
