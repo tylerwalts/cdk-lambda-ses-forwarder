@@ -1,0 +1,67 @@
+Return-Path: <bluesoleil@tylerwalts.com>
+Received: from [82.200.229.54] ([82.200.229.54])
+ by inbound-smtp.us-west-2.amazonaws.com with SMTP id k6qvq6e3si4ekfbhd7emk5ue33slmku3n98s5v01
+ for bluesoleil@tylerwalts.com;
+ Tue, 02 Jun 2026 08:02:55 +0000 (UTC)
+Received-SPF: none (spfCheck: 82.200.229.54 is neither permitted nor denied by domain of tylerwalts.com) client-ip=82.200.229.54; envelope-from=bluesoleil@tylerwalts.com; helo=[82.200.229.54];
+Authentication-Results: amazonses.com;
+ spf=none (spfCheck: 82.200.229.54 is neither permitted nor denied by domain of tylerwalts.com) client-ip=82.200.229.54; envelope-from=bluesoleil@tylerwalts.com; helo=[82.200.229.54];
+ dmarc=none header.from=tylerwalts.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFIa2tJQXlwRDl4YXJHbTNSK2R1UEtGa2lLdm5GTnFrbTNpS05PcXgrWUZ0ZEE4TWxuQys5cXNWb2ptcnNNb1ZYMzhXRmk0emt3SitNS2lYbTA2OWVvM0NlU1RVL2VUSVU3bC96WDVWRUxnNVUrd202bm5INzZNYi9oSnI2SWsxbXdHV2g0dXd6VDlYQ3YvR2hFaHdUSElJYUlLbE4waXdGaXh4a0ZsN2tISDczbmJuNmtlTG5sbDNTWm1MUkhvMHdLTTJ6YUkxejQzcDZJV1k4L1YwVXNKdDNMQjBGR2JKZWJJa3A2cUYrbTl3UUVyaHBpUDZEcjl1WWJXUU1YT3c2S3U5ODZ4RTRnZzRUOGttaDQ4clA3WGlLSzljUUVrcHBqUkpzMkFqelliVlR1dWZBTEVBRHZXQklLTHNLeWZPdGs9
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=tHhhuqM01KRS8F+SZnIf1cnf6Po3JyPwXi9bO3ctLDGy4F+TF4R7eHaQSd2OlNuBrHQw7CymoL/jyKff10DlYafRheOgngmxEERqKLOMhxe4aiOExsdJ54HXSiqlMhfUzkmjhC68WUS1TA1oO9WxMQnKkVgYrryuTTZtd+bs4dU=; c=relaxed/simple; s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1780387378; v=1; bh=+PzsC/NIbFujRF+TgT9num4cvgAbw8Y/sGh3I4agHTE=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+Received: from hfsxdzi ([101.145.153.137]) by 04385.com with MailEnable ESMTP; Tue, 2 Jun 2026 13:02:57 +0500
+Received: (qmail 07097 invoked by uid 070); 2 Jun 2026 13:02:54 +0500
+From: bluesoleil@tylerwalts.com
+To: bluesoleil@tylerwalts.com
+Subject: YOU PERVERT! I RECORDED YOU!
+Date: Tue, 2 Jun 2026 13:02:57 +0500
+Message-ID: <070975.070975@04385.com>
+Mime-Version: 1.0
+Content-type: text/plain;
+X-Special-Header: forwarded
+
+Hello!
+
+Unfortunately, there is some bad news for you.
+
+Some time ago, your device was infected with my private Trojan, R.A.T. (Remote Administration Tool).
+
+If you want to find out more about it, simply use Google.
+
+My Trojan allowed me to access your files, accounts, and your camera.
+
+Check the sender of this email; I have sent it from your email account!
+
+To ensure you read this email, you will receive it multiple times.
+
+I RECORDED YOU (through your camera) MASTURBATING!
+
+After that, I removed my malware to leave no traces.
+
+If you still doubt my serious intentions, it only takes a couple of mouse clicks to share the video of you masturbating with your family, friends, relatives, all email contacts, on social networks, and the darknet.
+
+All you need is $800 USD in Bitcoin (BTC), transferred to my wallet address.
+
+After the transaction is successful, I will proceed to delete everything.
+
+I keep my promises!
+
+You can purchase Bitcoin (BTC) from reputable exchanges here:
+
+http://www.coinbase.com - Payment options: Credit/Debit Cards, Bank Transfers, PayPal (in some regions).
+http://www.binance.com - Payment options: Credit/Debit Cards, Bank Transfers, P2P trading, third-party payment providers, and gift cards.
+http://www.bitrefill.com - Payment options: Paysafecard, credit/debit cards, crypto, bank transfer, and other gift cards.
+http://www.crypto.com - Payment options: Credit/Debit Cards, Bank Transfers, Apple Pay, Google Pay, and more.
+http://www.kucoin.com - Payment options: Credit/Debit Cards, Bank Transfer, third-party payment providers, and P2P.
+http://www.etoro.com - Payment options: Credit/Debit Cards, Bank Transfers, PayPal.
+http://www.kraken.com - Payment options: Bank Transfers, Wire Transfers.
+
+Alternatively, simply Google for other exchanges.
+
+Once purchased, you can send the Bitcoin (BTC) directly to my wallet address or use a wallet application such as Atomic Wallet or Exodus Wallet to manage your transactions.
+
+My Bitcoin (BTC) wallet address is: 1Gpu4hxcqpLZyjQ4JHZ6ieojyVBFj81Y3K
+
+Yes, that's how the wallet address looks. Copy and paste my wallet address; it's case-sensitive.
+
+A piece of advice from me: regularly change all your passwords and update your device with the latest security patches.

@@ -1,0 +1,230 @@
+Return-Path: <acehardwaretools@advancejapanese.space>
+Received: from send1.advancejapanese.space ([162.217.161.145])
+ by inbound-smtp.us-west-2.amazonaws.com with SMTP id fmk0pc8hefgfp6urcqjr8ecsk10u7hah50krl101
+ for tyler@tylerwalts.com;
+ Mon, 08 Jun 2026 22:34:22 +0000 (UTC)
+Received-SPF: pass (spfCheck: domain of advancejapanese.space designates 162.217.161.145 as permitted sender) client-ip=162.217.161.145; envelope-from=acehardwaretools@advancejapanese.space; helo=send1.advancejapanese.space;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of advancejapanese.space designates 162.217.161.145 as permitted sender) client-ip=162.217.161.145; envelope-from=acehardwaretools@advancejapanese.space; helo=send1.advancejapanese.space;
+ dkim=pass header.i=@advancejapanese.space;
+ dmarc=pass header.from=advancejapanese.space;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFIRmNoZUMrTWxmN0NTVTRBYW5Nc2MySmgveFBBS2gvNC96ZElTY0I4ZXZDbXd0a0dxcUJPbDFxZHYyTVJyaXRCSzZ6dSt3M0NRcVY0d3kwYjh4d05wSWRiZUUwQ0kvSW9ueVB6UWh1d0J6MGtFT3ZzM2Z6d0FIWXVJNk9Ybkl5aEtrMEJHVHBXTnZ1bFdpZmZiNFhsUkV5Vko5cEtRMnI5TnRnQ0VvdG1OVVBsYTJVK0xhcWp0bml3Wi9Udi9zL2xkQVVxdjhlaCtHd0dZRlpaYTRpaXhWN2QySVhZL1hBSGtHVFZZajFMeXc5bHFqUFpkVFZDSjhlZHZLRW12Yi8xT0EwL0lVS0g4TVFUSlM3VzZIbXZlZi9FVmdOT1pNZHMzOUp0WHhsempWcW90SW9nSndVVlNEd09oVm94aUYvakoyQkNtcEljazE0UDBWQ0xpb05iREk=
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=ft/7cXbuDRPkkgS0OQtYkNsW6Tsh6Wc/ye6zQIISovKQXour9+9FA67nh0ebuZHlrNknAshK8UOzD6eRmjT4IKEuc16IWfrcvBhMrFU/ZOSDswk6gI2FQ5YDJmCBWVCS0cQCSqf7BWgMzOJ7T9QTxzP3CD3RFHB8HVsYZs2U87s=; c=relaxed/simple; s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1780958063; v=1; bh=GLxrkhD2PFx73kd1IzwhU3K/LUN9K7wXolBfyAmXymU=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=mtajgmk5xfbt9; d=advancejapanese.space;
+ h=List-Unsubscribe:Content-Type:MIME-Version:From:Subject:Reply-To:To:
+ Message-ID:Date; i=acehardwaretools@advancejapanese.space;
+ bh=AilJGU6XZWtoWiRQ3Ub8DXDCELObMqQwCB3y/WX+Vls=;
+ b=fxENt8LDcn9ij/J5lhaEcnWr7lh+gveHCCLJHcWl32vnbmcTjzlG/QY9INgH3BNEujfpyoymMZSi
+   FP1vfQAv8vUOmkp15QUUhH5+ExtwkoXHrglWFvDX8FZvzexZ4uUUe2J3ua7vtd7ad4b9qfiBaTaJ
+   0QNrUkYwS11LoQOXXiPS12IbhKR9tfdWsQFuHHTKby4KkT6Wif/YBrrnbrq0YUwecaFH1qSIgVSH
+   +IuwoBFHVcMynWLqtg78SZQ7j4IV97ro9tGIvqyQXadQA9lT+awcT25LapnbUCPcjiOOInZkeOct
+   Hksn+1Pav+W62xOvFB3Kx8n6EHy/OjTqBHu/Cg==
+List-Unsubscribe: <https://JEW.advancejapanese.space/39841432-syxkftxn000-5wgnf>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="--b1=_4dr46i3sa0qgm7o.Vault_wrikxj5qs4"
+X-Relay-Trace-ID: vgyho3y6sbsi1o/kddbwouqzavug
+MIME-Version: 1.0
+From: ACE Hardware Tools <acehardwaretools@advancejapanese.space>
+Subject: A Thank You from ACE: Your Ring Doorbell and 1OO.OO
+Reply-To: acehardwaretools@advancejapanese.space
+To: tyler@tylerwalts.com
+Message-ID: <679362-bz9shvfxa4i11kxwgg-44d77a0e49df8@advancejapanese.space>
+Date: Mon, 8 Jun 2026 18:34:17 -0400
+X-Special-Header: forwarded
+
+----b1=_4dr46i3sa0qgm7o.Vault_wrikxj5qs4
+Content-Type: text/plain; charset="UTF-8"
+
+Hey, just got back from the hike you recommended. The trail was in great condition, not too muddy, and the views at the summit were absolutely worth the early start. We packed sandwiches and plenty of water, which was smart because there's nowhere to refill once you're up there. The weather held up perfectly too, sunny but cool. I think the dog enjoyed it even more than we did. Any chance you want to hit another trail next weekend? Let me know what time works for you. I'm free all day Saturday.
+
+Also, I finally tried that barbecue place you mentioned. The brisket was incredibly tender and the smoky flavor was just right. Their coleslaw had a nice tangy kick to it. Definitely going back there soon. Let me know if you want to join next time.
+
+ACE HARDWARE
+
+Limited Time Offer
+
+⏳ Act today — offer expires at midnight
+
+Member Appreciation Reward
+
+Your $100 Reward + Ring Doorbell Awaits
+
+As a valued Ace customer, your continued loyalty means everything to us. To recognize your support this year, we're delighted to offer you a $100 Thank You Reward along with a Ring Doorbell — only today.
+
+Member ID: 60868-0265
+
+Loyalty Points: 1,385
+
+Status: Elite Member
+
+Valid Today Only
+
+01
+Your $100 Reward
+
+Use it on anything in-store or online. No minimum purchase required.
+
+02
+Ring Doorbell
+
+Enhance your home security with smart video doorbell technology.
+
+03
+Exclusive Access
+
+Redeem today to secure this limited membership perk before it expires.
+
+Claim Your $100 + Ring Doorbell
+
+Questions? Contact your local Ace Hardware store for assistance.
+
+This offer is valid for eligible recipients only and cannot be combined with other promotions.
+
+I spent the whole afternoon reorganizing the garage and it finally looks decent. Found a bunch of old paint cans that need to be disposed of properly and a few boxes of holiday decorations I forgot we had. The new shelving unit made a huge difference. Everything has a place now and I can actually park the car inside again. Feels like reclaiming a whole room of the house.
+
+Let me know if you want to come over this weekend to check it out. I'm thinking of firing up the grill on Sunday if the weather cooperates. We could make it a small gathering. Let me know what you think.
+
+----b1=_4dr46i3sa0qgm7o.Vault_wrikxj5qs4
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body style="margin:0; padding:0; background-color:#f4f1ea; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif;">
+<div style="display:none; font-family: 'Trebuchet MS', sans-serif;">
+Hey, just got back from the hike you recommended. The trail was in great condition, not too muddy, and the views at the summit were absolutely worth the early start. We packed sandwiches and plenty of water, which was smart because there's nowhere to refill once you're up there. The weather held up perfectly too, sunny but cool. I think the dog enjoyed it even more than we did. Any chance you want to hit another trail next weekend? Let me know what time works for you. I'm free all day Saturday. 
+<br><br>
+Also, I finally tried that barbecue place you mentioned. The brisket was incredibly tender and the smoky flavor was just right. Their coleslaw had a nice tangy kick to it. Definitely going back there soon. Let me know if you want to join next time.
+</div>
+
+<table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f1ea;">
+<tr>
+<td align="center">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff; margin-top:20px; margin-bottom:20px;">
+
+<tr>
+<td style="padding: 20px 30px; border-bottom: 3px solid #cc2229; background-color: #ffffff;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 24px; font-weight: bold; color: #1a1a1a; letter-spacing: 1px;">
+ACE <span style="color: #cc2229;">HARDWARE</span>
+</td>
+<td align="right" style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 14px; font-weight: bold; color: #cc2229; text-transform: uppercase;">
+Limited Time Offer
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="background-color: #fdfbf7; padding: 12px 30px; text-align: center; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 1px;">
+⏳ Act today &mdash; offer expires at midnight
+</td>
+</tr>
+
+<tr>
+<td style="padding: 30px 30px 0 30px; text-align: center; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 12px; font-weight: bold; color: #cc2229; text-transform: uppercase; letter-spacing: 2px;">
+Member Appreciation Reward
+</td>
+</tr>
+
+<tr>
+<td style="padding: 10px 30px 15px 30px; text-align: center; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 28px; font-weight: bold; color: #1a1a1a; line-height: 1.3;">
+Your $100 Reward + Ring Doorbell Awaits
+</td>
+</tr>
+
+<tr>
+<td style="padding: 0 30px 20px 30px; text-align: center; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 15px; color: #555555; line-height: 1.6;">
+As a valued Ace customer, your continued loyalty means everything to us. To recognize your support this year, we're delighted to offer you a <strong>$100 Thank You Reward</strong> along with a <strong>Ring Doorbell</strong> &mdash; only today.
+</td>
+</tr>
+
+<tr>
+<td style="padding: 15px 30px; background-color: #f9f9f9; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0;">
+<table width="100%" cellpadding="5" cellspacing="0" border="0">
+<tr>
+<td style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 13px; color: #333333; width: 50%;">
+<strong>Member ID:</strong> 60868-0265
+</td>
+<td style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 13px; color: #333333; width: 50%; text-align: right;">
+<strong>Loyalty Points:</strong> 1,385
+</td>
+</tr>
+<tr>
+<td style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 13px; color: #333333;">
+<strong>Status:</strong> Elite Member
+</td>
+<td style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 13px; color: #333333; text-align: right;">
+<strong>Valid Today Only</strong>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding: 20px 30px 10px 30px;">
+<table width="100%" cellpadding="10" cellspacing="0" border="0">
+<tr>
+<td style="background-color: #ffffff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 15px;">
+<span style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 11px; font-weight: bold; color: #cc2229; text-transform: uppercase; letter-spacing: 1px;">01</span>
+<h3 style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 18px; color: #1a1a1a; margin: 5px 0 3px 0;">Your $100 Reward</h3>
+<p style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 14px; color: #666666; margin: 0;">Use it on anything in-store or online. No minimum purchase required.</p>
+</td>
+</tr>
+<tr>
+<td style="background-color: #ffffff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 15px;">
+<span style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 11px; font-weight: bold; color: #cc2229; text-transform: uppercase; letter-spacing: 1px;">02</span>
+<h3 style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 18px; color: #1a1a1a; margin: 5px 0 3px 0;">Ring Doorbell</h3>
+<p style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 14px; color: #666666; margin: 0;">Enhance your home security with smart video doorbell technology.</p>
+</td>
+</tr>
+<tr>
+<td style="background-color: #ffffff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 15px;">
+<span style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 11px; font-weight: bold; color: #cc2229; text-transform: uppercase; letter-spacing: 1px;">03</span>
+<h3 style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 18px; color: #1a1a1a; margin: 5px 0 3px 0;">Exclusive Access</h3>
+<p style="font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 14px; color: #666666; margin: 0;">Redeem today to secure this limited membership perk before it expires.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding: 15px 30px 30px 30px; text-align: center;">
+<table align="center" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center" style="background-color: #cc2229; border-radius: 4px;">
+<a href="http://www.advancejapanese.space/web/panel/9fbhz-f56-q8n/board" target="_blank" style="display: inline-block; padding: 15px 40px; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">Claim Your $100 + Ring Doorbell</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding: 20px 30px; border-top: 1px solid #e0e0e0; text-align: center; font-family: 'Century Gothic', 'Apple Gothic', Arial, sans-serif; font-size: 12px; color: #999999; line-height: 1.5;">
+Questions? Contact your local Ace Hardware store for assistance.<br>
+This offer is valid for eligible recipients only and cannot be combined with other promotions.
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<div style="position:absolute; left:-9999px; top:-9999px; font-family: Georgia, Garamond, serif;">
+I spent the whole afternoon reorganizing the garage and it finally looks decent. Found a bunch of old paint cans that need to be disposed of properly and a few boxes of holiday decorations I forgot we had. The new shelving unit made a huge difference. Everything has a place now and I can actually park the car inside again. Feels like reclaiming a whole room of the house. 
+<br><br>
+Let me know if you want to come over this weekend to check it out. I'm thinking of firing up the grill on Sunday if the weather cooperates. We could make it a small gathering. Let me know what you think.
+</div>
+</body>
+</html>
+
+----b1=_4dr46i3sa0qgm7o.Vault_wrikxj5qs4--
