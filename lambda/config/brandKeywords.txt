@@ -5,3 +5,6 @@ Walmart
 Costco
 PayPal
 Netflix
+Lowe's
+Lowes
+Verizon

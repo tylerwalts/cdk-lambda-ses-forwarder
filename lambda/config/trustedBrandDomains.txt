@@ -4,3 +4,7 @@ walmart.com
 costco.com
 paypal.com
 netflix.com
+lowes.com
+mylowes.com
+verizon.com
+vzw.com
