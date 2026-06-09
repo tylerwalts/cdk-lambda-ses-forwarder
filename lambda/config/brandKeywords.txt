@@ -1,10 +1,147 @@
-Harbor Freight
-HarborFreight
+# Brand names that spammers impersonate in the From display name.
+# If a brand keyword appears in the display name but the sender domain
+# is NOT in trustedBrandDomains.txt, it's flagged as brand impersonation.
+# Matching is case-insensitive.
+
+# Retail
 Amazon
 Walmart
+Target
 Costco
-PayPal
-Netflix
+Home Depot
 Lowe's
 Lowes
-Verizon
+Best Buy
+Nordstrom
+Nike
+REI
+Macy's
+Macys
+Kohl's
+Kohls
+Wayfair
+Etsy
+eBay
+Sephora
+Fred Meyer
+Kroger
+Safeway
+Office Depot
+Harbor Freight
+HarborFreight
+
+# Finance
+Chase
+Bank of America
+Wells Fargo
+Capital One
+Citi
+Citibank
+Discover
+American Express
+Amex
+Fidelity
+Charles Schwab
+Vanguard
+US Bank
+USAA
+Robinhood
+Coinbase
+M1 Finance
+Monarch Money
+
+# Payments
+PayPal
+Venmo
+Zelle
+Cash App
+Square
+Stripe
+
+# Tech
+Google
+Apple
+Microsoft
+Adobe
+Zoom
+Dropbox
+Slack
+Discord
+GitHub
+AWS
+
+# Streaming/Media
+Netflix
+Spotify
+Hulu
+Disney
+YouTube
+Audible
+New York Times
+
+# Social
+LinkedIn
+Facebook
+Meta
+Instagram
+Twitter
+Reddit
+Pinterest
+Nextdoor
+Meetup
+
+# Shipping/Travel
+USPS
+UPS
+FedEx
+DHL
+Delta Air
+Alaska Airlines
+United Airlines
+Southwest Airlines
+Airbnb
+Expedia
+TripAdvisor
+Hilton
+Marriott
+
+# Food
+DoorDash
+Uber Eats
+Grubhub
+Instacart
+Starbucks
+Chipotle
+
+# Oregon/PNW
+Portland General Electric
+PGE
+Pacific Power
+NW Natural
+Xfinity
+Comcast
+TriMet
+Trail Blazers
+
+# Insurance/Health
+Kaiser Permanente
+Kaiser
+Providence
+State Farm
+Geico
+Progressive
+Allstate
+CVS
+Walgreens
+
+# Other
+Peloton
+OpenTable
+Ticketmaster
+Live Nation
+StubHub
+CarMax
+Omaha Steak
+Sam's Club
+Sams Club
+Best Buy

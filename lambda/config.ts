@@ -34,6 +34,7 @@ export const config = {
   bulkMailHeaders: loadList('bulkMailHeaders.txt'),
   brandKeywords: loadList('brandKeywords.txt'),
   trustedBrandDomains: loadList('trustedBrandDomains.txt'),
+  trustedSenderDomains: loadList('trustedSenderDomains.txt'),
   verifiedAliases: loadList('verifiedAliases.txt'),
 
   forwardMapping: {

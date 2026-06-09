@@ -1,0 +1,5 @@
+# Trusted sender domains. Emails from these domains always pass spam filters,
+# even if they would otherwise match a keyword or brand impersonation rule.
+# One domain per line.
+hillsborohops.com
+

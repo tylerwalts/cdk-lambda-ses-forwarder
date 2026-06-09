@@ -15,6 +15,10 @@ function filterSpam(data) {
   if (config.config.spamFilter == 2) {
     const sesNotification = data.event.Records[0].ses;
 
+    if (isTrustedSender(sesNotification.mail.source)) {
+      return Promise.resolve(data);
+    }
+
     filterBySESReceiptVerdicts(sesNotification.receipt, data.spamReasons);
     filterBySubjectKeyword(sesNotification.mail.commonHeaders.subject, data.spamReasons);
     filterByTargetRecipient(sesNotification.mail.destination[0], data.spamReasons);
@@ -33,6 +37,14 @@ function filterSpam(data) {
     }
     return Promise.reject(new Error(spamKey));
   }
+}
+
+
+function isTrustedSender(source) {
+  const senderDomain = source.split('@').pop().toLowerCase();
+  return config.config.trustedSenderDomains.some(
+    d => senderDomain === d.toLowerCase() || senderDomain.endsWith('.' + d.toLowerCase())
+  );
 }
 
 

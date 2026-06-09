@@ -4,3 +4,4 @@
 # e.g. "linkedin" requires sender domain to contain "linkedin"
 # One alias per line (just the local part, without @domain).
 linkedin
+bestbuy
