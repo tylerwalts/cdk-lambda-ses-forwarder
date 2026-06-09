@@ -29,6 +29,9 @@ Safeway
 Office Depot
 Harbor Freight
 HarborFreight
+Ace Hardware
+Blue Cross Blue Shield
+BCBS
 
 # Finance
 Chase
